@@ -67,6 +67,7 @@ export const philosophers = [
       }
     },
 
+    // Current descriptions are stubs
     keyTerms: [
       {
         term: "德",
