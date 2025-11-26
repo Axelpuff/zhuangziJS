@@ -31,9 +31,9 @@ camera.rotation.x = - Math.PI / 2; // looking down
 camera.rotation.z = Math.PI / 2; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
 
 
-/* const controls = new OrbitControls(camera, canvas);
+const controls = new OrbitControls(camera, canvas);
 controls.target.z = 60;
-controls.update(); */
+controls.update();
 
 const envLoader = new THREE.TextureLoader();
 const env = await envLoader.loadAsync('assets/images/footprint_court.jpg');
@@ -69,12 +69,21 @@ for (let i = 0; i < points.length; i++) {
 }
 
 // orb test
-const spheregeom = new THREE.SphereGeometry( 15, 32, 16 );
+const spheregeom = new THREE.SphereGeometry( 1, 32, 16 );
 const spheremat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-const sphere = new THREE.Mesh( spheregeom, spheremat );
-scene.add( sphere );
-sphere.position = new THREE.Vector3(0, 10, -40)
 
+const rc = new THREE.Raycaster(new THREE.Vector3(10, 10, 30), new THREE.Vector3(-1, 0, 0));
+const intersections = rc.intersectObjects(lines, false);
+console.log(intersections);
+for (let i = 0; i < intersections.length; i++) {
+    console.log(intersections[i]);
+    const sphere = new THREE.Mesh( spheregeom, spheremat );
+    sphere.position.copy(intersections[i].point);
+    scene.add( sphere );
+}
+
+
+// guqin model
 const loader = new GLTFLoader();
 const guqin = await loader.loadAsync('assets/chinese_zither/scene.gltf');
 
