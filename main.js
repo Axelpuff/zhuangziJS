@@ -50,18 +50,18 @@ scene.add(directional.target);
 scene.add(lightHelper); */
 
 // timeline lines
-const linemat = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-// could be refactored, there are only 4-5 numbers that are important in here
-const points = [
-        [new THREE.Vector3( 0, 10, -56 ), new THREE.Vector3( 0, 10, 62 )],
-        [new THREE.Vector3( 2.9, 10, -56 ), new THREE.Vector3( 0.93, 10, 62 )],
-        [new THREE.Vector3( 5.8, 10, -56 ), new THREE.Vector3( 1.86, 10, 62 )],
-        [new THREE.Vector3( 8.7, 10, -56 ), new THREE.Vector3( 2.8, 10, 62 )],
-        [new THREE.Vector3( -2.9, 10, -56 ), new THREE.Vector3( -0.93, 10, 62 )],
-        [new THREE.Vector3( -5.8, 10, -56 ), new THREE.Vector3( -1.86, 10, 62 )],
-        [new THREE.Vector3( -8.7, 10, -56 ), new THREE.Vector3( -2.8, 10, 62 )],
-];
+const linemat = new THREE.LineBasicMaterial( { transparent: true, opacity: 0, color: 0xff0000 } );
+const staff_start = 62; // positive x is towards the narrow end
+const staff_end = -56;
+const staff_y = 10;
+const width_start = 0.93;
+const width_end = 2.9;
+const points = [];
 const lines = [];
+
+for (let i = -3; i <= 3; i++) {
+    points.push([new THREE.Vector3(i * width_start, staff_y, staff_start), new THREE.Vector3(i * width_end, staff_y, staff_end)]);
+}
 for (let i = 0; i < points.length; i++) {
     const geometry = new THREE.BufferGeometry().setFromPoints( points[i] );
     lines[i] = new THREE.Line( geometry, linemat);
@@ -72,7 +72,7 @@ for (let i = 0; i < points.length; i++) {
 const spheregeom = new THREE.SphereGeometry( 1, 32, 16 );
 const spheremat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 
-const rc = new THREE.Raycaster(new THREE.Vector3(10, 10, 30), new THREE.Vector3(-1, 0, 0));
+const rc = new THREE.Raycaster(new THREE.Vector3(10, 10, -30), new THREE.Vector3(-1, 0, 0));
 const intersections = rc.intersectObjects(lines, false);
 console.log(intersections);
 for (let i = 0; i < intersections.length; i++) {
