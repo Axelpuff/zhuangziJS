@@ -5,7 +5,7 @@ export const schools = [
     id: "confucian",
     name: "Confucian/Rujia",
     chineseName: "...",
-    color: "vermillion",
+    color: 0xff0000, // "vermillion",
   },
   {
     id: "mohist",
@@ -56,12 +56,12 @@ export const philosophers = [
     focusLayouts: {
       // e.g., where this philosopher *moves to* when Mencius is selected
       mencius: {
-        targetPosition: [x, y, z],
+        // targetPosition: [x, y, z],
         fade: 1.0,                  // 1 = fully visible, 0 = faded out
         scale: 1.0                  // For emphasis or de-emphasis
       },
       xunzi: {
-        targetPosition: [x, y, z],
+        // targetPosition: [x, y, z],
         fade: 0.5,
         scale: 0.9
       }
@@ -109,7 +109,7 @@ export const philosophers = [
 
     // How this orb behaves when *others* are the perspective
     focusLayouts: {
-      xunzi:   { targetPosition: [x, y, z], fade: 0.4, scale: 0.8 }
+      xunzi:   { /*targetPosition: [x, y, z],*/ fade: 0.4, scale: 0.8 }
       // etc.
     },
 
@@ -186,7 +186,9 @@ export const philosophers = [
     chineseName: "惠子",
     school: "mingjia",
     major: false,
-    // basePosition: [x2, y2, z2],
+    timePosition: 340,
+    string: 4,
+
     relationships: [
     //   { targetId: "zhuangzi", kind: "debates", tone: "mixed", strength: 0.9 }
     ],

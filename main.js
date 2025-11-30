@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { schools, philosophers } from './philosophers.js';
 
 const orthoBoxHeight = 15
 
@@ -51,8 +52,8 @@ scene.add(lightHelper); */
 
 // timeline lines
 const linemat = new THREE.LineBasicMaterial( { transparent: true, opacity: 0, color: 0xff0000 } );
-const staff_start = 62; // positive x is towards the narrow end
-const staff_end = -56;
+const staff_start_z = 62; // positive x is towards the narrow end
+const staff_end_z = -56;
 const staff_y = 10;
 const width_start = 0.93;
 const width_end = 2.9;
@@ -60,7 +61,7 @@ const points = [];
 const lines = [];
 
 for (let i = -3; i <= 3; i++) {
-    points.push([new THREE.Vector3(i * width_start, staff_y, staff_start), new THREE.Vector3(i * width_end, staff_y, staff_end)]);
+    points.push([new THREE.Vector3(i * width_start, staff_y, staff_start_z), new THREE.Vector3(i * width_end, staff_y, staff_end_z)]);
 }
 for (let i = 0; i < points.length; i++) {
     const geometry = new THREE.BufferGeometry().setFromPoints( points[i] );
@@ -68,20 +69,34 @@ for (let i = 0; i < points.length; i++) {
     scene.add(lines[i]);
 }
 
-// orb test
-const spheregeom = new THREE.SphereGeometry( 1, 32, 16 );
-const spheremat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+// orb proper implementation
+const staff_start_time = 1000; // 1000 BC
+const staff_end_time = 0; // 0 AD
+const time_to_z_factor = (staff_end_z - staff_start_z) / (staff_end_time - staff_start_time);
 
-const rc = new THREE.Raycaster(new THREE.Vector3(10, 10, -30), new THREE.Vector3(-1, 0, 0));
-const intersections = rc.intersectObjects(lines, false);
-console.log(intersections);
-for (let i = 0; i < intersections.length; i++) {
-    console.log(intersections[i]);
-    const sphere = new THREE.Mesh( spheregeom, spheremat );
-    sphere.position.copy(intersections[i].point);
-    scene.add( sphere );
+function get_orb_position(timePosition, string) {
+    const z = time_to_z_factor * (timePosition - staff_start_time) + staff_start_z;
+    const rc = new THREE.Raycaster(new THREE.Vector3(10, 10, z), new THREE.Vector3(-1, 0, 0));
+    const intersections = rc.intersectObject(lines[string], false);
+    return intersections[0]; // these are both lines so there should only be one intersection
 }
 
+// orb test
+const spheregeom = new THREE.SphereGeometry( 1, 32, 16 );
+for (const philosopher of philosophers) {
+    console.log(philosopher);
+    console.log(philosopher.id);
+    console.log(philosopher.school);
+    const color = schools.find((school) => {
+        return philosopher.school == school.id;
+    }).color;
+    const spheremat = new THREE.MeshBasicMaterial( { color: color } );
+
+    const sphere = new THREE.Mesh( spheregeom, spheremat );
+    console.log(get_orb_position(philosopher.timePosition, philosopher.string));
+    sphere.position.copy((get_orb_position(philosopher.timePosition, philosopher.string)).point);
+    scene.add( sphere );
+}
 
 // guqin model
 const loader = new GLTFLoader();
