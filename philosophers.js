@@ -42,13 +42,57 @@ export const schools = [
 
 export const philosophers = [
   {
+    id: "odea",
+    name: "Odes",
+    chineseName: "詩經",
+    school: "confucian",
+    major: false,
+    dates: [1000, 600], // no source
+    string: 4,
+
+    relationships: [],
+
+    views: {},
+
+    keyTerms: [
+      { term: "德", pinyin: "dé", description: "Moral potency exemplified by ancient sage-kings." }
+    ],
+
+    quote: "I transmit but do not innovate. (Analects 7.1 — Confucius referencing antiquity)",
+
+    imageRefs: ["assets/images/odes_history.jpg"]
+  },
+
+  {
+    id: "history",
+    name: "History",
+    chineseName: "書經",
+    school: "confucian",
+    major: false,
+    dates: [1100, 700], // no source
+    string: 4,
+
+    relationships: [],
+
+    views: {},
+
+    keyTerms: [
+      { term: "德", pinyin: "dé", description: "Moral potency exemplified by ancient sage-kings." }
+    ],
+
+    quote: "I transmit but do not innovate. (Analects 7.1 — Confucius referencing antiquity)",
+
+    imageRefs: ["assets/images/odes_history.jpg"]
+  },
+
+  {
     id: "confucius",
     name: "Confucius",
     chineseName: "孔子",            // Optional but useful for UI
     school: "confucian",            // Used to derive color + legend
     major: true,                    // Distinguish scope/importance
-    timePosition: 600,              // Chronological time, determines position along zither strings in the neutral view
-    string: 3,                      // String to display on in neutral view
+    dates: [551, 479],              // Estimated birth and death date, determines position along zither strings in the neutral view
+    string: 4,                      // String to display on in neutral view
 
     // Perspective-specific target layouts
     // Only Mencius and Xunzi will have full entries initially.
@@ -91,6 +135,13 @@ export const philosophers = [
         strength: 0.8,             // 0–1; could drive line opacity or thickness
         notes: "Confucius places the odes as one of the main documents of culture."
       },
+      {
+        targetId: "history",
+        kind: "buildsOn",
+        tone: "positive",        // positive | negative | mixed | playful | ambiguous
+        strength: 0.8,             // 0–1; could drive line opacity or thickness
+        notes: "Confucius places the history as one of the main documents of culture."
+      },
     ],
 
     imageRefs: [
@@ -98,14 +149,237 @@ export const philosophers = [
       "assets/images/bronze_inscription.jpg"
     ]
   },
+
+  {
+    id: "mozi",
+    name: "Mozi",
+    chineseName: "墨子",
+    school: "mohist",
+    major: true,
+    dates: [480, 390],
+    string: 3,
+
+    relationships: [
+      { targetId: "confucius", kind: "critiques", tone: "negative", strength: 0.9,
+        notes: "Rejects ritual excess; promotes universal impartial care." },
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "兼愛", pinyin: "jiān'ài", description: "Impartial care for all." },
+      { term: "非攻", pinyin: "fēi gōng", description: "Condemnation of offensive warfare." }
+    ],
+
+    quote: "The benevolent care for others impartially.",
+
+    imageRefs: ["assets/images/mozi.jpg"]
+  },
+
+  {
+    id: "yangzhu",
+    name: "Yang Zhu",
+    chineseName: "楊朱",
+    school: "yangist",
+    major: false,
+    dates: [440, 360], // from wikipedia, same as Britannica
+    string: 5,
+
+    relationships: [
+      { targetId: "mozi", kind: "opposes", tone: "negative", strength: 0.8 },
+      { targetId: "mencius", kind: "critiquedBy", tone: "negative", strength: 0.9 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "性", pinyin: "xìng", description: "Human nature centered on preserving one's life." }
+    ],
+
+    quote: "If plucking a single hair would benefit the world, he would not do it.",
+
+    imageRefs: ["assets/images/yangzhu.jpg"]
+  },
+
+  {
+    id: "gaozi",
+    name: "Gaozi",
+    chineseName: "告子",
+    school: "mohist",
+    major: false,
+    dates: [420, 350], // from wikipedia
+    string: 3,
+
+    relationships: [
+      { targetId: "mencius", kind: "opposes", tone: "negative", strength: 0.9 },
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "性", pinyin: "xìng", description: "Human nature centered on preserving one's life." }
+    ],
+
+    quote: "Man's nature is like a tree, and righteousness is like cups and bowls.",
+
+    imageRefs: ["assets/images/willowtree.jpg"]
+  },
+
+  {
+    id: "mencius",
+    name: "Mencius",
+    chineseName: "孟子",
+    school: "confucian",
+    major: true,
+    dates: [371, 289],
+    string: 4,
+
+    relationships: [
+      { targetId: "yangzhu", kind: "critiques", tone: "negative", strength: 1.0 },
+      { targetId: "mozi", kind: "critiques", tone: "negative", strength: 1.0 },
+      { targetId: "confucius", kind: "buildsOn", tone: "respectful", strength: 1.0 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "性善", pinyin: "xìng shàn", description: "Human nature is originally good." },
+      { term: "四端", pinyin: "sì duān", description: "Four sprouts—beginnings of virtue." }
+    ],
+
+    quote: "The heart of compassion is the sprout of benevolence.",
+
+    imageRefs: ["assets/images/mencius.jpg"]
+  },
+
+  {
+    id: "huizi",
+    name: "Huizi",
+    chineseName: "惠子",
+    school: "mingjia",
+    major: false,
+    dates: [380, 300], // birth date from Britannica, death just an estimate
+    string: 6,
+
+    relationships: [
+    //   { targetId: "zhuangzi", kind: "debates", tone: "mixed", strength: 0.9 }
+    ],
+    views: {
+    //   zhuangzi: {
+    //     quote: "You are not a fish; how do you know the joy of fish?",
+    //     explanation:
+    //       "From Huizi’s standpoint, Zhuangzi’s appeals to knowing are suspect; he pushes for stricter logic.",
+    //     visualHint: { emphasis: 1.2, connectionStyle: "cross" }
+    //   }
+    }
+  },
+
+  {
+    id: "gongsunlongzi",
+    name: "Gongsun Longzi",
+    chineseName: "公孫龍子",
+    school: "mingjia",
+    major: false,
+    dates: [325, 250],
+    string: 6,
+
+    relationships: [],
+
+    views: {},
+
+    keyTerms: [
+      { term: "名・實", pinyin: "míng / shí", description: "Name and actuality; distinction puzzles." }
+    ],
+
+    quote: "A white horse is not a horse.",
+
+    imageRefs: ["assets/images/gongsunlongzi.jpg"]
+  },
+
+  {
+    id: "neiyeh",
+    name: "Nei-yeh/Inward Training",
+    chineseName: "內業",
+    school: "daoist",
+    major: false,
+    dates: [350, 350], // from Wikipedia, need to check with book. need some way to indicate this isn't birth and death dates
+    string: 2,
+
+
+    relationships: [
+      { targetId: "laozi", kind: "influences", tone: "ambiguous", strength: 0.5 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "氣", pinyin: "qì", description: "Vital energy cultivated through stillness." },
+      { term: "定", pinyin: "dìng", description: "Stabilization of mind and body." }
+    ],
+
+    quote: "When the heart is settled, the vital energy becomes aligned.",
+
+    imageRefs: ["assets/images/neiyeh.jpg"]
+  },
+
+  {
+    id: "laozi",
+    name: "Laozi",
+    chineseName: "老子",
+    school: "daoist",
+    major: true,
+    dates: [600, 500], // based on Britannica ("flourished 6th centry BCE"), also need a way of indicating this
+    string: 2,
+
+    relationships: [
+      { targetId: "confucius", kind: "critiques", tone: "mixed", strength: 0.5 },
+      { targetId: "zhuangzi", kind: "influences", tone: "positive", strength: 0.7 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "無為", pinyin: "wúwéi", description: "Effortless action; non-coercive alignment." },
+      { term: "道", pinyin: "dào", description: "The unnamed source of all things." }
+    ],
+
+    quote: "The Dao that can be spoken is not the constant Dao.",
+
+    imageRefs: ["assets/images/laozi.jpg"]
+  },
+
+  {
+    id: "shendao",
+    name: "Shen Dao",
+    chineseName: "慎到",
+    school: "legalist",
+    major: false,
+    dates: [350, 275], // wikipedia, may need to go on JSTOR or something for this. No britannica
+    string: 7,
+
+    relationships: [
+      { targetId: "hanfeizi", kind: "influences", tone: "positive", strength: 0.9 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "勢", pinyin: "shì", description: "Power/positional authority independent of virtue." }
+    ],
+
+    quote: "When a man rides a carriage, it is the carriage that is noble, not the man.",
+
+    imageRefs: ["assets/images/shendao.jpg"]
+  },
+
   {
     id: "zhuangzi",
     name: "Zhuangzi",
     chineseName: "莊子",
     school: "daoist",
     major: true,
-    timePosition: 320,
-    string: 3,
+    dates: [369, 286], // Britannica
+    string: 2,
 
     // How this orb behaves when *others* are the perspective
     focusLayouts: {
@@ -179,27 +453,84 @@ export const philosophers = [
     ]
   },
 
-  // Huizi entry might have his *own* relationships + views, independently:
   {
-    id: "huizi",
-    name: "Huizi",
-    chineseName: "惠子",
-    school: "mingjia",
-    major: false,
-    timePosition: 340,
+    id: "xunzi",
+    name: "Xunzi",
+    chineseName: "荀子",
+    school: "confucian",
+    major: true,
+    dates: [300, 230], // Britannica
     string: 4,
 
     relationships: [
-    //   { targetId: "zhuangzi", kind: "debates", tone: "mixed", strength: 0.9 }
+      { targetId: "mencius", kind: "disagrees", tone: "negative", strength: 1.0,
+        notes: "Rejects Mencius’ claim that human nature is good." },
+      { targetId: "laozi", kind: "critiques", tone: "negative", strength: 0.8 }
     ],
-    views: {
-    //   zhuangzi: {
-    //     quote: "You are not a fish; how do you know the joy of fish?",
-    //     explanation:
-    //       "From Huizi’s standpoint, Zhuangzi’s appeals to knowing are suspect; he pushes for stricter logic.",
-    //     visualHint: { emphasis: 1.2, connectionStyle: "cross" }
-    //   }
-    }
-  }
-  // … repeat objects for Mozi, Mencius, Laozi, Zhuangzi, Xunzi, etc.
+
+    views: {},
+
+    keyTerms: [
+      { term: "性惡", pinyin: "xìng è", description: "Human nature is bad; goodness is cultivated." },
+      { term: "禮", pinyin: "lǐ", description: "Ritual as the system that shapes desires." }
+    ],
+
+    quote: "Human nature is bad; goodness is a matter of deliberate activity.",
+
+    imageRefs: ["assets/images/xunzi.jpg"]
+  },
+
+  {
+    id: "lordshang",
+    name: "Lord Shang",
+    chineseName: "商鞅",
+    school: "legalist",
+    major: true,
+    dates: [390, 338], // Britannica
+    string: 7,
+    
+    relationships: [
+      { targetId: "confucius", kind: "opposes", tone: "negative", strength: 1.0 },
+      { targetId: "hanfeizi", kind: "influences", tone: "positive", strength: 1.0 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "法", pinyin: "fǎ", description: "Clear, public, strict laws." },
+      { term: "術", pinyin: "shù", description: "Techniques of statecraft." }
+    ],
+
+    quote: "When laws are fixed and clear, the people cannot be unruly.",
+
+    imageRefs: ["assets/images/lordshang.jpg"]
+  },
+
+  {
+    id: "hanfeizi",
+    name: "Han Feizi",
+    chineseName: "韓非子",
+    school: "legalist",
+    major: true,
+    dates: [280, 233],
+    string: 7,
+    
+    relationships: [
+      { targetId: "lordshang", kind: "buildsOn", tone: "neutral", strength: 1.0 },
+      { targetId: "mencius",   kind: "rejects",  tone: "negative", strength: 1.0 },
+      { targetId: "shendao",   kind: "buildsOn", tone: "neutral", strength: 0.8 }
+    ],
+
+    views: {},
+
+    keyTerms: [
+      { term: "法", pinyin: "fǎ", description: "Law as the objective standard of governance." },
+      { term: "勢", pinyin: "shì", description: "Power/authority of position." },
+      { term: "術", pinyin: "shù", description: "Administrative methods and control." }
+    ],
+
+    quote: "The wise ruler uses law, not virtue, to govern.",
+
+    imageRefs: ["assets/images/hanfeizi.jpg"]
+  },
 ];

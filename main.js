@@ -84,7 +84,8 @@ const time_to_z_factor = (staff_end_z - staff_start_z) / (staff_end_time - staff
 function get_orb_position(timePosition, string) {
     const z = time_to_z_factor * (timePosition - staff_start_time) + staff_start_z;
     const rc = new THREE.Raycaster(new THREE.Vector3(10, 10, z), new THREE.Vector3(-1, 0, 0));
-    const intersections = rc.intersectObject(lines[string], false);
+    // string within the struct is numbered 1-7, so subtract 1
+    const intersections = rc.intersectObject(lines[string - 1], false);
     return intersections[0]; // these are both lines so there should only be one intersection
 }
 
@@ -97,8 +98,8 @@ for (const philosopher of philosophers) {
 
     const sphere = new THREE.Mesh( spheregeom, spheremat );
     sphere.name = philosopher.id;
-    console.log(get_orb_position(philosopher.timePosition, philosopher.string));
-    sphere.position.copy(get_orb_position(philosopher.timePosition, philosopher.string).point);
+    const timePosition = (philosopher.dates[0] + philosopher.dates[1]) / 2 // for now just take the average of the beginning and end
+    sphere.position.copy(get_orb_position(timePosition, philosopher.string).point);
     scene.add( sphere );
     orbs.push( sphere );
 }
