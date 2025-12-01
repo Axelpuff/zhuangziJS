@@ -75,6 +75,8 @@ Tasks:
   * On hover/click, show the philosopher’s **name** in a small top-left or bottom overlay.
 * Implement raycasting to pick orbs with mouse click.
 
+* **Complete:** 11/30 4:30 PM
+
 ### 4. Mencius perspective (1.5–2h) – **Pre-presentation**
 
 **Goal:** First impressive “rearrange the field” interaction.
@@ -96,6 +98,21 @@ Tasks:
 * UI:
 
   * Bottom panel: big **孟子 / Mèngzǐ**, key terms (e.g. xing, sprouts, human nature), and 1–2 sentence blurb.
+
+* Code should be in main.js, with minor modifications in philosophers.js for target positions
+1. Refactor global state to hold focus/unfocused state and focused philosopher
+  * (Perhaps a hover_focus state as well)
+  * Need a transition bool to prevent normal interactions when state is changing
+2. On clicking Mencius, transitioning = true, focus = true, move relevant orbs (Mencius, Confucius, Mozi, Gaozi, Yang Zhu) into position in center, other orbs disappear
+3. Pane shows up on right side with information
+4. Keywords show up on left
+5. X button on top right of pane that goes back to neutral view
+
+Scope restrictions:
+* For now, panels are just plain gray with white text
+
+Stop at 6:30 to get dinner - 1 hour after that, should be done
+* Ended up taking much more time: until 10:20, without the proper orb rearrangements
 
 ### 5. Xunzi perspective (1.5–2h) – **Pre-presentation**
 

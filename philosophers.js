@@ -42,13 +42,15 @@ export const schools = [
 
 export const philosophers = [
   {
-    id: "odea",
+    id: "odes",
     name: "Odes",
     chineseName: "詩經",
     school: "confucian",
     major: false,
     dates: [1000, 600], // no source
     string: 4,
+
+    description: "Important poetry.",
 
     relationships: [],
 
@@ -160,11 +162,34 @@ export const philosophers = [
     string: 3,
 
     relationships: [
+      { targetId: "odes", kind: "buildsOn", tone: "positive", strength: 0.9,
+        notes: "Rejects ritual excess; promotes universal impartial care." },
+      { targetId: "history", kind: "buildsOn", tone: "positive", strength: 0.9,
+        notes: "Rejects ritual excess; promotes universal impartial care." },
       { targetId: "confucius", kind: "critiques", tone: "negative", strength: 0.9,
         notes: "Rejects ritual excess; promotes universal impartial care." },
     ],
 
-    views: {},
+    views: {
+      confucius: {
+        quote: "That fellow Kong Qiu...",
+        explanation:
+          "Bro hates Confucius",
+        visualHint: {
+          emphasis: 1.1,
+          connectionStyle: "zigzag"
+        }
+      },
+      odes: {
+        quote: "later chapter stuff",
+        explanation:
+          "Despite his vicious disapproval of Confucius, Mozi places great authority in the classics. Because of this, by the time of the unification and the Han dynasty, they were often lumped together in the same sentence (Huinanzi and other guy)",
+        visualHint: {
+          emphasis: 1.1,
+          connectionStyle: "zigzag"
+        }
+      }
+    },
 
     keyTerms: [
       { term: "兼愛", pinyin: "jiān'ài", description: "Impartial care for all." },
@@ -271,7 +296,11 @@ export const philosophers = [
     //       "From Huizi’s standpoint, Zhuangzi’s appeals to knowing are suspect; he pushes for stricter logic.",
     //     visualHint: { emphasis: 1.2, connectionStyle: "cross" }
     //   }
-    }
+    },
+
+    keyTerms: [
+      { term: "?", pinyin: "?", description: "Placeholder" },
+    ],
   },
 
   {
