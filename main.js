@@ -16,12 +16,18 @@ const sizes = {
   height: window.innerHeight,
 };
 
-const aspect = sizes.width / sizes.height;
+let aspect = sizes.width / sizes.height;
 const scene = new THREE.Scene();
 const baseOrthoBoxHeight = 15;
 const renderInfo = {
   orthoBoxHeight: baseOrthoBoxHeight,
 };
+
+const canvas = document.getElementById("experience-canvas");
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
 const camera = new THREE.OrthographicCamera(
   -aspect * renderInfo.orthoBoxHeight,
   aspect * renderInfo.orthoBoxHeight,
@@ -30,12 +36,13 @@ const camera = new THREE.OrthographicCamera(
   0.1,
   1000
 );
-
-const canvas = document.getElementById("experience-canvas");
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-renderer.setSize(sizes.width, sizes.height);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
+function updateCamera() {
+  camera.left = -aspect * renderInfo.orthoBoxHeight;
+  camera.right = aspect * renderInfo.orthoBoxHeight;
+  camera.top = renderInfo.orthoBoxHeight;
+  camera.bottom = -renderInfo.orthoBoxHeight;
+  camera.updateProjectionMatrix();
+}
 camera.position.y = 20; // above
 camera.position.z = 45; // to the left end of the guqin
 camera.rotation.x = -Math.PI / 2; // looking down
@@ -45,20 +52,22 @@ camera.rotation.z = Math.PI / 2; // guqin oriented horizontally. On mobile shoul
 controls.target.z = 60;
 controls.update(); */
 
+// Skybox
 const envLoader = new THREE.TextureLoader();
 const env = await envLoader.loadAsync("assets/images/footprint_court.jpg");
 env.mapping = THREE.EquirectangularReflectionMapping;
 scene.environment = env;
 scene.environmentIntensity = 0.5;
 
+// Default directional light
 const directional = new THREE.DirectionalLight(0xffffff, 0.5);
 directional.position.set(-8, 60, 50);
 directional.target.position.set(8, 0, 16);
 scene.add(directional);
 scene.add(directional.target);
 
-// timeline lines
-const linemat = new THREE.LineBasicMaterial({
+// Timeline lines
+const lineMat = new THREE.LineBasicMaterial({
   transparent: true,
   opacity: 0,
   color: 0xff0000,
@@ -68,22 +77,22 @@ const staff_end_z = -56;
 const staff_y = 10;
 const width_start = 0.93;
 const width_end = 2.9;
-const points = [];
-const lines = [];
+const staffPoints = [];
+const staffLines = [];
 
 for (let i = -3; i <= 3; i++) {
-  points.push([
+  staffPoints.push([
     new THREE.Vector3(i * width_start, staff_y, staff_start_z),
     new THREE.Vector3(i * width_end, staff_y, staff_end_z),
   ]);
 }
-for (let i = 0; i < points.length; i++) {
-  const geometry = new THREE.BufferGeometry().setFromPoints(points[i]);
-  lines[i] = new THREE.Line(geometry, linemat);
-  scene.add(lines[i]);
+for (let i = 0; i < staffPoints.length; i++) {
+  const geometry = new THREE.BufferGeometry().setFromPoints(staffPoints[i]);
+  staffLines[i] = new THREE.Line(geometry, lineMat);
+  scene.add(staffLines[i]);
 }
 
-// create philosopher orbs
+// Create philosopher orbs
 const staff_start_time = 1000; // 1000 BC
 const staff_end_time = 0; // 0 AD
 const time_to_z_factor =
@@ -97,33 +106,103 @@ function get_orb_position(timePosition, string) {
     new THREE.Vector3(-1, 0, 0)
   );
   // string within the struct is numbered 1-7, so subtract 1
-  const intersections = rc.intersectObject(lines[string - 1], false);
-  return intersections[0]; // there should only be one intersection
+  const intersections = rc.intersectObject(staffLines[string - 1], false);
+  console.assert(intersections[0]);
+  return intersections[0].point; // there should be exactly one intersection
 }
 
-const spheregeom = new THREE.SphereGeometry(1, 32, 16);
+const sphereGeomMajor = new THREE.SphereGeometry(1, 32, 16);
+const sphereGeomMinor = new THREE.SphereGeometry(0.85, 32, 16);
 const orbs = [];
 const orbMap = {};
 for (const philosopher of philosophers) {
-  const color = schoolMap[philosopher.school].color;
-  const spheremat = new THREE.MeshBasicMaterial({ color: color });
-
-  const sphere = new THREE.Mesh(spheregeom, spheremat);
-  sphere.name = philosopher.id;
+  const color = philosopher.color || schoolMap[philosopher.school].color;
   const timePosition = (philosopher.dates[0] + philosopher.dates[1]) / 2; // for now just take the average of the beginning and end
-  sphere.position.copy(
-    get_orb_position(timePosition, philosopher.string).point
-  );
-  scene.add(sphere);
-  orbs.push(sphere);
-  orbMap[philosopher.id] = sphere;
-}
-let focusedOrbs = orbs.slice();
 
-// guqin model
+  const spheremat = new THREE.MeshBasicMaterial({ color: color });
+  const orb = new THREE.Mesh(
+    philosopher.major ? sphereGeomMajor : sphereGeomMinor,
+    spheremat
+  );
+  orb.name = philosopher.id;
+  orb.position.copy(get_orb_position(timePosition, philosopher.string));
+  orbs.push(orb);
+  orbMap[philosopher.id] = orb;
+  scene.add(orb);
+}
+let focusedOrbs = orbs.slice(); // Needs to be a clone so it can be modified separately
+
+const orbPerspectiveY = 15;
+const orbPerspectiveAxis = new THREE.Object3D();
+orbPerspectiveAxis.rotation.x = -Math.PI / 2;
+orbPerspectiveAxis.rotation.z = Math.PI / 2;
+scene.add(orbPerspectiveAxis);
+
+// set focused orbs to all orbs relevant to (and including) philosopherId
+function focusRelevantOrbs(philosopherId, views) {
+  const mainOrb = orbMap[philosopherId];
+  focusedOrbs = [mainOrb];
+  for (const philosopherId in views) {
+    focusedOrbs.push(orbMap[philosopherId]);
+  }
+  // position perspective axis based on current orb location
+  orbPerspectiveAxis.position.z = mainOrb.position.z;
+  orbPerspectiveAxis.position.y = orbPerspectiveY;
+}
+
+function repositionFocusedOrbs(selectedPhilId, displayPosition, views, tl) {
+  for (const orb of focusedOrbs) {
+    const philosopherId = orb.name;
+    console.log(philosopherId);
+    let targetRelativePos = new THREE.Vector3().copy(
+      philosopherId == selectedPhilId
+        ? displayPosition
+        : views[philosopherId].display.position
+    );
+    let targetWorldPos = orbPerspectiveAxis.localToWorld(targetRelativePos);
+    tl.to(orb.position, {
+      duration: 1,
+      ease: "circ.inout",
+      x: targetWorldPos.x,
+      y: targetWorldPos.y,
+      onComplete: () => {
+        if (orb.parent == null) {
+          orbPerspectiveAxis.attach(orb);
+        }
+      },
+    }, "-=0.8").to(
+      orb.position,
+      {
+        duration: 1,
+        ease: "elastic.inout(1.75,1)",
+        z: targetWorldPos.z,
+        onComplete: () => {
+          if (orb.parent == null) {
+            orbPerspectiveAxis.attach(orb);
+          }
+        },
+      },
+      "-=1"
+    );
+  }
+}
+
+// reparents focused orbs to scene with original positions and refocuses all orbs
+function resetFocusedOrbs() {
+  for (const orb of focusedOrbs) {
+    const philosopher = philosopherMap[orb.name];
+    const timePosition = (philosopher.dates[0] + philosopher.dates[1]) / 2;
+
+    scene.add(orb);
+    orb.position.copy(get_orb_position(timePosition, philosopher.string));
+  }
+  // reset focus to all orbs
+  focusedOrbs = orbs.slice();
+}
+
+// Guqin model
 const loader = new GLTFLoader();
 const guqin = await loader.loadAsync("assets/chinese_zither/scene.gltf");
-
 guqin.scene.traverse((obj) => {
   if (obj.name == "Collada_visual_scene_group") {
     obj.position.x = 2.1; // for some reason required to center the guqin
@@ -136,9 +215,9 @@ guqin.scene.traverse((obj) => {
   mat.vertexColors = false;
   mat.needsUpdate = true;
 });
-
 scene.add(guqin.scene);
 
+// Blur plane
 const planeGeom = new THREE.PlaneGeometry(200, 200, 1, 1);
 const planeMat = new THREE.MeshPhysicalMaterial({
   transmission: 1,
@@ -150,6 +229,45 @@ const blurPlane = new THREE.Mesh(planeGeom, planeMat);
 blurPlane.position.y = 12.5;
 blurPlane.rotation.x = -Math.PI / 2;
 scene.add(blurPlane);
+
+function unblurBackground() {
+  blurPlane.material.opacity = 0;
+  directional.intensity = 0.5;
+}
+
+// Perspective mode prop management
+// let activeProps = [];
+function addProps(props, axis, timeline) {
+  for (let i = 0; i < props.length; i++) {
+    const prop = props[i];
+    const properties = prop.properties;
+    if (prop.type == "arrow") {
+      const arrow = new THREE.ArrowHelper(
+        properties.dir,
+        properties.origin || { x: 0, y: 0, z: 0 },
+        0,
+        properties.color,
+        properties.headLength,
+        properties.headWidth
+      );
+      axis.add(arrow);
+      // it's ok if the user goes back during this animation, the arrow will get cleared
+      // (unless GSAP has a memory leak?)
+      const arrowState = { length: 0 };
+      arrow.visible = false;
+      timeline.to(arrowState, {
+        duration: 0.25,
+        length: properties.length,
+        onStart: () => {
+          arrow.visible = true;
+        },
+        onUpdate: () => {
+          arrow.setLength(arrowState.length);
+        },
+      });
+    }
+  }
+}
 
 /*
 | Pointer state
@@ -198,7 +316,8 @@ function getPointedPhilId() {
   return orb.name;
 }
 
-// scrolling
+// Scroll handling
+let scrollable = true; // false when intro implemented
 const scrollArea = document.getElementById("scroll-area");
 const scroll_start_z = 50; // positive z is towards the narrow end
 const scroll_end_z = -50;
@@ -211,37 +330,24 @@ function handleScroll(event) {
   camera.position.z =
     scrollPercent * (scroll_end_z - scroll_start_z) + scroll_start_z;
 }
-window.addEventListener("scroll", handleScroll);
 
-// philosopher picking
-// full philosopher picking flow (from neutral):
-// no hover: philosopher icons are visible on each orb
-// hover:
-//  romanized name appears in white text under orb
-//  if user hasn't clicked any orb yet, show text on bottom of screen: "click a philosopher to change to their view"
-// click:
-//  zither blurs and darkens into background, non-important orbs disappear
-//  important orbs rearrange into shape on left half of screen
-//  term-specific info appears on bottom third of screen
-//  main description appears on right half of screen
-//      exit button/back arrow is on this pane. Revert to neutral when clicked
-//
-// philosopher picking flow (from specific view of X):
-// no hover: only icons
-// hover:
-//  orb glows
-//  romanized name hover text
-//  if user hasn't clicked any orb yet from specific view, show text on bottom of screen: "click a philosopher to learn about X's view of them"
-// click:
-//  orb stays lit, others darken
-//  right pane now shows information about X's view on Y
-//      exit button/back arrow is on this pane. Revert to previous right pane when clicked
-// click (on philosopher X): either revert to default specific view, or do nothing if already in specific view
+let neutralPosZ = scroll_start_z; // saved state for returning to neutral
+let neutralScroll = 0; // saved state for neutral
+function restoreScroll() {
+  scrollArea.style.overflow = "auto";
+  scrollArea.style.height = "500vh"; // magic number
+
+  camera.position.z = neutralPosZ;
+  window.scrollTo({ top: neutralScroll, behavior: "instant" });
+  scrollable = true;
+}
+function saveScroll() {
+  scrollable = false;
+}
+window.addEventListener("scroll", handleScroll);
 
 // Application state (updated on events)
 let currentState = "neutral"; // should be "intro" (implemented later), "neutral", or "perspective"
-let neutralPosZ = scroll_start_z; // saved state for returning to neutral
-let neutralScroll = 0; // saved state for neutral
 let transitioning = false;
 let selectedPhilId = null;
 let secondaryPhilId = null; // selected philosopher when in perspective already, null if not in perspective
@@ -251,45 +357,6 @@ const infoPanels = document.getElementById("info-panels");
 const leftPanel = document.getElementById("left-panel");
 const rightPanel = document.getElementById("right-panel");
 const bottomPanel = document.getElementById("bottom-panel");
-
-const orbPerspectiveAxis = new THREE.Object3D();
-let activeProps = [];
-orbPerspectiveAxis.rotation.x = -Math.PI / 2;
-orbPerspectiveAxis.rotation.z = Math.PI / 2;
-scene.add(orbPerspectiveAxis);
-const orbPerspectiveY = 15;
-
-function addProps(props, axis, timeline) {
-  for (let i = 0; i < props.length; i++) {
-    const prop = props[i];
-    const properties = prop.properties;
-    if (prop.type == "arrow") {
-      const arrow = new THREE.ArrowHelper(
-        properties.dir,
-        properties.origin || { x: 0, y: 0, z: 0 },
-        0,
-        properties.color,
-        properties.headLength,
-        properties.headWidth
-      );
-      axis.add(arrow);
-      // it's ok if the user goes back during this animation, the arrow will get cleared
-      // (unless GSAP has a memory leak?)
-      const arrowState = { length: 0 };
-      arrow.visible = false;
-      timeline.to(arrowState, {
-        duration: 0.25,
-        length: properties.length,
-        onStart: () => {
-          arrow.visible = true;
-        },
-        onUpdate: () => {
-          arrow.setLength(arrowState.length);
-        },
-      });
-    }
-  }
-}
 
 function clearProps(axis) {
   axis.clear(); // dispose?
@@ -301,11 +368,7 @@ function changeState(destState, destPhilId) {
   transitioning = true;
 
   if (currentState == "neutral") {
-    neutralPosZ = camera.position.z;
-    neutralScroll = window.scrollY;
-    // disable scrolling for other modes
-    scrollArea.style.overflow = "hidden";
-    scrollArea.style.height = "100%";
+    saveScroll();
   } else if (currentState == "perspective") {
     selectedPhilId = null;
     secondaryPhilId = null;
@@ -313,34 +376,13 @@ function changeState(destState, destPhilId) {
   }
 
   if (destState == "neutral") {
+    console.assert(currentState != "neutral");
     // tween camera to neutralPosZ
     renderInfo.orthoBoxHeight = baseOrthoBoxHeight;
-    handleResize();
-    // allow scrolling
-    scrollArea.style.overflow = "auto";
-    scrollArea.style.height = "500vh"; // magic number
-
-    camera.position.z = neutralPosZ;
-    window.scrollTo({top: neutralScroll, behavior: "instant"});
-    
-
-
-    // unblur
-    blurPlane.material.opacity = 0;
-    directional.intensity = 0.5; // magic number
-
-    // reset orbs to original positions
-    for (const orb of focusedOrbs) {
-      const philosopher = philosopherMap[orb.name];
-      scene.add(orb);
-
-      const timePosition = (philosopher.dates[0] + philosopher.dates[1]) / 2;
-      orb.position.copy(
-        get_orb_position(timePosition, philosopher.string).point
-      );
-    }
-    // reset focus to all orbs
-    focusedOrbs = orbs.slice();
+    updateCamera();
+    restoreScroll();
+    unblurBackground();
+    resetFocusedOrbs();
     // tween panes to transparency separately
     infoPanels.style.display = "none";
   } else if (destState == "perspective") {
@@ -349,83 +391,25 @@ function changeState(destState, destPhilId) {
     console.assert(!secondaryPhilId);
 
     selectedPhilId = destPhilId;
+    const selectedPhil = philosopherMap[destPhilId];
 
     // get relevant orbs
-    const selectedPhil = philosopherMap[destPhilId];
-    const mainOrb = orbMap[destPhilId];
-    focusedOrbs = [mainOrb];
-    for (const philosopherId in selectedPhil.views) {
-      focusedOrbs.push(orbMap[philosopherId]);
-    }
+    focusRelevantOrbs(selectedPhilId, selectedPhil.views);
 
-    // position perspective axis based on current orb location
-    orbPerspectiveAxis.position.z = mainOrb.position.z;
-    orbPerspectiveAxis.position.y = orbPerspectiveY;
-
-    // reparent orbs to axis
-    for (let i = 0; i < focusedOrbs.length; i++) {
-      const orb = focusedOrbs[i];
-      const philosopherId = orb.name;
-      let targetWorldPos;
-      if (philosopherId == destPhilId) {
-        // seems bad
-        const temp = new THREE.Vector3(
-          selectedPhil.displayPosition.x,
-          selectedPhil.displayPosition.y,
-          selectedPhil.displayPosition.z
-        );
-        targetWorldPos = orbPerspectiveAxis.localToWorld(temp);
-      } else {
-        const view = selectedPhil.views[philosopherId];
-        const temp = new THREE.Vector3(
-          view.display.position.x,
-          view.display.position.y,
-          view.display.position.z
-        );
-        targetWorldPos = orbPerspectiveAxis.localToWorld(temp);
-      }
-      let tl = gsap.timeline();
-      tl.to(orb.position, {
-        duration: 1,
-        delay: i * 0.1,
-        ease: "circ.out",
-        x: targetWorldPos.x,
-        y: targetWorldPos.y,
-        z: targetWorldPos.z,
-        onComplete: () => {
-          if (orb.parent == null) {
-            orbPerspectiveAxis.attach(orb);
-          }
-        },
-      }).to(
-        orb.position,
-        {
-          duration: 1,
-          delay: i * 0.1,
-          ease: "elastic.out(1.75,1)",
-          z: targetWorldPos.z,
-          onComplete: () => {
-            if (orb.parent == null) {
-              orbPerspectiveAxis.attach(orb);
-            }
-          },
-        },
-        0
-      );
-      //orb.position.copy(view.display.position);
-
-      // tween other orbs around this orb
-      // make these orbs glow more
-    }
-    // tween camera z to orb position
     let tl = gsap.timeline();
+    // tween other orbs around this orb
+    repositionFocusedOrbs(selectedPhilId, selectedPhil.displayPosition, selectedPhil.views, tl);
+    // make these orbs glow more
+
+    // tween camera z to orb position
+    
     const bruhduration = 1;
     tl.to(camera.position, {
       duration: bruhduration,
       z: orbPerspectiveAxis.position.z,
     }).to(
       renderInfo,
-      { duration: bruhduration, orthoBoxHeight: 25, onUpdate: handleResize },
+      { duration: bruhduration, orthoBoxHeight: 25, onUpdate: updateCamera },
       0
     ); // might be really slow
     // blur everything that isn't focusedOrbs
@@ -594,13 +578,8 @@ window.addEventListener("touchend", clearPointerPosition);
 function handleResize() {
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
-  const aspect = sizes.width / sizes.height;
-  //duplicated
-  camera.left = -aspect * renderInfo.orthoBoxHeight;
-  camera.right = aspect * renderInfo.orthoBoxHeight;
-  camera.top = renderInfo.orthoBoxHeight;
-  camera.bottom = -renderInfo.orthoBoxHeight;
-  camera.updateProjectionMatrix();
+  aspect = sizes.width / sizes.height;
+  updateCamera();
 
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

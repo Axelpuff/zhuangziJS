@@ -326,7 +326,7 @@ export const philosophers = [
     dates: [371, 289],
     string: 4,
 
-    displayPosition: { x: 0, y: 3, z: 0 }, // intended to be directly above
+    displayPosition: { x: 0, y: 6, z: 0 }, // intended to be directly above
     displayProps: [
       {
         type: "arrow",
@@ -367,7 +367,7 @@ export const philosophers = [
           "Mencius saw Yang Zhu as going wrong, but precisely in the opposite direction of Mozi.",
         display: {
           brightness: 0.5,
-          position: { x: -6, y: 0, z: 0 }, // intended to be to the left
+          position: { x: 3, y: 0, z: 0 }, // intended to be to the left
         },
       },
       mozi: {
@@ -376,7 +376,7 @@ export const philosophers = [
           "Mencius also questions the literal truth of the events in the History, whereas Mozi relies on them to justify how spirits reinforce a just cosmos.",
         display: {
           brightness: 0.5,
-          position: { x: 6, y: 0, z: 0 }, // intended to be to the right
+          position: { x: -3, y: 0, z: 0 }, // intended to be to the right
         },
       },
       gaozi: {
@@ -384,7 +384,7 @@ export const philosophers = [
         explanation: "TBA",
         display: {
           brightness: 0.5,
-          position: { x: -3, y: 0, z: 0 }, // intended to be to the left
+          position: { x: -6, y: 0, z: 0 }, // intended to be to the left
         },
       },
       confucius: {
@@ -392,7 +392,7 @@ export const philosophers = [
         explanation: "TBA",
         display: {
           brightness: 0.5,
-          position: { x: 0, y: 6, z: 0 }, // intended to be upwards
+          position: { x: 0, y: 3, z: 0 }, // intended to be upwards
         },
       },
       history: {
@@ -400,7 +400,7 @@ export const philosophers = [
         explanation: "Mencius directly states his disbelief in the History.",
         display: {
           brightness: 0.5,
-          position: { x: -3, y: 3, z: 0 }, // intended to be upwards
+          position: { x: -6, y: 6, z: 0 }, // intended to be upwards
         },
       },
     },
