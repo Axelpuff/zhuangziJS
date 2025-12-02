@@ -70,11 +70,14 @@ camera.position.z = 45; // to the left end of the guqin
 camera.rotation.x = -Math.PI / 2; // looking down
 camera.rotation.z = Math.PI / 2; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
 
+let vertical = false;
 function setHorizontal() {
+  vertical = false;
   camera.rotation.z = Math.PI / 2; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
   orbPerspectiveAxis.rotation.z = Math.PI / 2;
 }
 function setVertical() {
+  vertical = true;
   camera.rotation.z = Math.PI; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
   orbPerspectiveAxis.rotation.z = Math.PI;
 }
@@ -659,8 +662,8 @@ function changeState(destState, destPhilId) {
     );
     // make these orbs glow more
     modifyCamera(
-      orbPerspectiveAxis.position.z,
-      25,
+      orbPerspectiveAxis.position.z + (vertical ? 25 * 0.2 : 25 * aspect * -0.5),
+      25, // magic num
       tl,
       startTime,
       blurDuration
@@ -692,14 +695,14 @@ function changeState(destState, destPhilId) {
 
 function showSecondary(destPhilId) {
   if (transitioning) return; // should the caller be responsible for this?
-  if (destPhilId == selectedPhilId) destPhilId = null;
+  //if (destPhilId == selectedPhilId) destPhilId = null;
   secondaryPhilId = destPhilId;
-  if (!destPhilId) {
+  /* if (!destPhilId) {
     leftPanel.style.opacity = 0;
     return;
-  }
-  const heading = document.querySelector("#left-panel > div:first-of-type");
-  const subheading = document.querySelector("#left-panel > h4:first-of-type");
+  } */
+  const heading = document.querySelector("#right-panel > div:first-of-type");
+  const subheading = document.querySelector("#right-panel > h4:first-of-type");
   const headCN = heading.querySelector(".cn");
   const headEN = heading.querySelector(".en");
 
@@ -827,6 +830,13 @@ function handleResize() {
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 }
+// bad
+if (aspect < 1) {
+    setVertical();
+  } else {
+    setHorizontal();
+  }
+  updateCamera();
 
 window.addEventListener("resize", handleResize);
 
