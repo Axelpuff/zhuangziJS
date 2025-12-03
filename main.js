@@ -451,7 +451,6 @@ function makeRelationshipLines(
       false //closed
     );
     const relLine = new THREE.Line(tubeGeometry, relMat);
-    console.log(relLine);
     props.push(relLine);
     axis.add(relLine);
     //const lineState = { length: 0 };
@@ -557,18 +556,13 @@ function clearPointerPosition() {
   pointerPosition.y = -100000;
 }
 
-function getPointedOrb() {
+function getPointedPhilId() {
   pointerRayCaster.setFromCamera(pointerPosition, camera);
   const intersections = pointerRayCaster.intersectObjects(focusedOrbs, false);
   if (!intersections.length) {
     return null;
   }
   const orb = intersections[0].object;
-  return orb;
-}
-
-function getPointedPhilId() {
-  const orb = getPointedOrb();
   if (!orb) return null;
   return orb.name;
 }
@@ -613,7 +607,6 @@ let secondaryPhilId = null; // selected philosopher when in perspective already,
 
 // this will get called outside the animate thread and so can wait and do other stuff
 function changeState(destState, destPhilId) {
-  console.log(transitioning);
   if (transitioning) return; // should the caller be responsible for this?
   transitioning = true;
   let tl = gsap.timeline({
@@ -717,10 +710,10 @@ function showSecondary(destPhilId) {
   subheading.textContent = view.quote;
   description.textContent = view.explanation || "Description pending";
   // leftPanel.style.opacity = 1;
-  console.log("hey");
 }
 
 function onPointerDown(event) {
+  setPointerPosition(event); // necessary for mobile
   const pointedPhilId = getPointedPhilId();
   if (!pointedPhilId) return;
   if (currentState == "neutral") {
@@ -766,14 +759,14 @@ function renderHoveredPhil() {
   }
   // I guess the ideal would be to tween the existing hover if you come back to the same orb before
   // the text fades. Maybe that's indistinguishable from just creating a new one though
-  const orb = getPointedOrb();
-  if (orb == null) {
+  const philosopherId = getPointedPhilId();
+  if (philosopherId == null) {
     hoveredPhil = null;
     return;
   }
+  const orb = orbMap[philosopherId];
 
-  hoveredPhil = philosopherMap[orb.name];
-
+  hoveredPhil = philosopherMap[philosopherId];
   const label = document.createElement("div");
   label.textContent = hoveredPhil.name;
   label.classList.add(hoveredPhil.id);
@@ -802,7 +795,7 @@ window.addEventListener(
   "touchstart",
   (event) => {
     // prevent the window from scrolling
-    event.preventDefault();
+    //event.preventDefault();
     setPointerPosition(event.touches[0]);
   },
   { passive: false }

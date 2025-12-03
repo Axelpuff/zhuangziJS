@@ -72,6 +72,10 @@
     justify-content: center;
 }
 
+#bottom-panel>div {
+    overflow-y: auto;
+}
+
 #experience {
     position: fixed;
     height: 100%;
