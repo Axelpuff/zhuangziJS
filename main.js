@@ -65,21 +65,23 @@ function modifyCamera(zPosition, orthoBoxHeight, tl, startTime, duration) {
     startTime
   );
 }
-camera.position.y = 20; // above
+camera.position.y = 30; // above
 camera.position.z = 45; // to the left end of the guqin
 camera.rotation.x = -Math.PI / 2; // looking down
 camera.rotation.z = Math.PI / 2; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
 
 let vertical = false;
+const axisRotationHorizontal = new THREE.Euler(-Math.PI / 2, 0, Math.PI / 2);
+const axisRotationVertical = new THREE.Euler(-Math.PI / 2, 0, Math.PI);
 function setHorizontal() {
   vertical = false;
   camera.rotation.z = Math.PI / 2; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
-  orbPerspectiveAxis.rotation.z = Math.PI / 2;
+  orbPerspectiveAxis.rotation.copy(axisRotationHorizontal);
 }
 function setVertical() {
   vertical = true;
   camera.rotation.z = Math.PI; // guqin oriented horizontally. On mobile should remain 0 (this would go in resizedisplay
-  orbPerspectiveAxis.rotation.z = Math.PI;
+  orbPerspectiveAxis.rotation.copy(axisRotationVertical);
 }
 
 /* const controls = new OrbitControls(camera, canvas);
@@ -208,7 +210,7 @@ for (const philosopher of philosophers) {
 }
 let focusedOrbs = orbs.slice(); // Needs to be a clone so it can be modified separately
 
-const orbPerspectiveY = 15;
+const orbPerspectiveY = 20;
 const orbPerspectiveAxis = new THREE.Object3D();
 orbPerspectiveAxis.rotation.x = -Math.PI / 2;
 orbPerspectiveAxis.rotation.z = Math.PI / 2;
@@ -222,6 +224,7 @@ function focusRelevantOrbs(philosopherId, views) {
     focusedOrbs.push(orbMap[philosopherId]);
   }
   // position perspective axis based on current orb location
+  orbPerspectiveAxis.rotation.copy(vertical ? axisRotationVertical : axisRotationHorizontal); // !!! not great
   orbPerspectiveAxis.position.z = mainOrb.position.z;
   orbPerspectiveAxis.position.y = orbPerspectiveY;
 }
@@ -251,9 +254,10 @@ function repositionFocusedOrbs(
         x: targetWorldPos.x,
         y: targetWorldPos.y, // not visually noticeable - remove?
         onComplete: () => {
-          if (orb.parent == null) {
-            orbPerspectiveAxis.attach(orb);
-          }
+          /* if (orb.parent == null) {
+            orb.position = orbPerspectiveAxis.worldToLocal(orb.position);
+            orbPerspectiveAxis.add(orb);
+          } */
         },
       },
       i == 0 ? startTime : "-=0.9" // should be 0.1 delay between orbs
@@ -265,9 +269,10 @@ function repositionFocusedOrbs(
         ease: "elastic.inout(1.75,1)",
         z: targetWorldPos.z,
         onComplete: () => {
-          if (orb.parent == null) {
-            orbPerspectiveAxis.attach(orb);
-          }
+          /* if (orb.parent == null) { */
+            orb.position.copy(orbPerspectiveAxis.worldToLocal(orb.position));
+            orbPerspectiveAxis.add(orb);
+          /* } */
         },
       },
       "-=1" // same time as x and y change
@@ -862,7 +867,14 @@ window.addEventListener("resize", handleResize);
 
 // rendering
 
-function animate() {
+function animate(time) {
+  if (selectedPhilId == "xunzi") {
+    orbPerspectiveAxis.rotation.x = time * 0.0001;
+    orbPerspectiveAxis.rotation.y = time * 0.0001;
+    orbPerspectiveAxis.rotation.z = time * 0.0001;
+    //orbPerspectiveAxis.updateMatrixWorld(true);
+    //console.log(orbPerspectiveAxis.position);
+  }
   renderHoveredPhil();
   renderer.render(scene, camera);
 }

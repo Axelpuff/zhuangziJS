@@ -301,8 +301,9 @@ export const philosophers = [
     dates: [420, 350], // from wikipedia
     string: 3,
 
-    description:
-      ["Gaozi is a Mohist figure largely known through the chapter of the Mencius bearing his name. While this means that he is unable to speak for himself apart from the Mencius' framing, the character of Gaozi gives some insight into the psychological development of Mohism in parallel with Confucianism."],
+    description: [
+      "Gaozi is a Mohist figure largely known through the chapter of the Mencius bearing his name. While this means that he is unable to speak for himself apart from the Mencius' framing, the character of Gaozi gives some insight into the psychological development of Mohism in parallel with Confucianism.",
+    ],
 
     relationships: [
       {
@@ -686,9 +687,10 @@ export const philosophers = [
     //"The Way of Heaven is such that if you \"follow\" then you will be great, while if you alter then you will be insignificant." (Section 2)
     views: {
       laozi: {
-        quote: "The Way of Heaven is such that if you \"follow\" then you will be great, while if you alter then you will be insignificant.",
+        quote:
+          'The Way of Heaven is such that if you "follow" then you will be great, while if you alter then you will be insignificant.',
         explanation:
-          "Some of Shen Dao's ideas seem based on the Laozi: he refers to the paradoxical nature of the \"Way of Heaven\", as well as claiming that a ruler must not try to handle everything individually or force others to change.",
+          'Some of Shen Dao\'s ideas seem based on the Laozi: he refers to the paradoxical nature of the "Way of Heaven", as well as claiming that a ruler must not try to handle everything individually or force others to change.',
         display: {
           brightness: 0.5,
           position: { x: -2, y: 0, z: 0 }, // intended to be to the left
@@ -727,14 +729,14 @@ export const philosophers = [
         from: "laozi",
         to: "confucius",
         kind: "opposes",
-        emphasis: 0.5
+        emphasis: 0.5,
       },
       {
         from: "gaozi",
         to: "mencius",
         kind: "opposes",
-        emphasis: 0.5
-      }
+        emphasis: 0.5,
+      },
     ],
 
     /**
@@ -750,7 +752,7 @@ export const philosophers = [
           "Multiple dialogs in the Zhuangzi are a discussion between Huizi and Zhuangzi. Huizi often plays the rational, logical foil to Zhuangzi's absurdity. Outside of these scenes, Zhuangzi treats him as a brilliant but futile thinker, someone he respects deeply but also thinks is trapped in distinctions.",
         display: {
           brightness: 1,
-          position: {x: -2, y: -2, z:0},
+          position: { x: -2, y: -2, z: 0 },
         },
       },
       confucius: {
@@ -760,18 +762,17 @@ export const philosophers = [
           "Kongzi appears as a kind of straight man in many of Zhuangzi's dialogs. At times he seems to eloquently voice Zhuangzi's views about the sage; at other times he is short-sighted or makes blunders he immediately regrets.",
         display: {
           brightness: 1,
-          position: {x: 2, y: -2, z:0},
+          position: { x: 2, y: -2, z: 0 },
         },
       },
       laozi: {
-        quote:
-          "When Laozi died...",
+        quote: "When Laozi died...",
         explanation:
-         //https://iep.utm.edu/laozi/
+          //https://iep.utm.edu/laozi/
           "Laozi appears as a character in the inner chapters of the Zhuangzi multiple times, usually critiquing Confucius. One major scene is Laozi's funeral, which is one of the first times Zhuangzi's attitude towards death is expressed (it's just another transformation).",
         display: {
           brightness: 1,
-          position: {x: 0, y: 1.5, z:0},
+          position: { x: 0, y: 1.5, z: 0 },
         },
       },
       mencius: {
@@ -779,7 +780,7 @@ export const philosophers = [
         explanation: "",
         display: {
           brightness: 1,
-          position: {x: 4, y: -4, z:0},
+          position: { x: 4, y: -4, z: 0 },
         },
       },
       gaozi: {
@@ -787,12 +788,12 @@ export const philosophers = [
         explanation: "",
         display: {
           brightness: 1,
-          position: {x: -4, y: -4, z:0},
+          position: { x: -4, y: -4, z: 0 },
         },
       },
       // …other targets from Zhuangzi’s perspective if you want
     },
-    displayPosition: {x: 0, y: 4.5, z: 0},
+    displayPosition: { x: 0, y: 4.5, z: 0 },
 
     keyTerms: [
       {
@@ -817,28 +818,280 @@ export const philosophers = [
     string: 4,
 
     relationships: [
-      {
+      /*  {
         targetId: "mencius",
         kind: "disagrees",
         tone: "negative",
         strength: 1.0,
         notes: "Rejects Mencius’ claim that human nature is good.",
       },
-      { targetId: "laozi", kind: "critiques", tone: "negative", strength: 0.8 },
+      { targetId: "laozi", kind: "critiques", tone: "negative", strength: 0.8 }, */
     ],
 
-    views: {},
+    views: {
+      confucius: {
+        quote: "",
+        explanation:
+          'Xunzi sees Confucius as the greatest sage in history. Unlike the later thinkers, Confucius did not fall into the trap of getting fixated on "one corner of the way".',
+        display: {
+          brightness: 1,
+          position: { x: 0, y: 0, z: 0 },
+        },
+      },
+      mozi: {
+        quote: "Mozi focused on profit, but did not understand proper form.",
+        explanation:
+          "Xunzi sees Mozi as focusing on material profit at the expense of the proper form of ritual, which has inherent value.",
+        display: {
+          brightness: 1,
+          position: { x: 0.0, y: 6.0, z: 0.0 },
+        },
+      },
+      mencius: {
+        quote: "Human nature is bad.",
+        explanation:
+          "Xunzi sees Mencius' description of human nature as dangerous. Implying that goodness comes about naturally, like sprouts growing, will cause people to mistakenly neglect the difficult task of self-cultivation.",
+        display: {
+          brightness: 1,
+          position: { x: 2.78, y: 3.88, z: -3.6 },
+        },
+      },
+      laozi: {
+        quote: "",
+        explanation:
+          "Xunzi writes that Laozi understood the virtue of not acting, but did not understand the role of intentional action.",
+        display: {
+          brightness: 1,
+          position: { x: -1.4, y: 1.76, z: -5.5 },
+        },
+      },
+      shendao: {
+        quote: "",
+        explanation:
+          "Xunzi writes that Shen Dao understood the importance of the law, but did not understand the role of individual virtue.",
+        display: {
+          brightness: 1,
+          position: { x: -5.5, y: -0.3, z: -2.2 },
+        },
+      },
+      huizi: {
+        quote: "",
+        explanation:
+          "Xunzi writes that Huizi was a master of words, but did not comprehend the importance of actual things.",
+        display: {
+          brightness: 1,
+          position: { x: -4.7, y: -2.4, z: 2.74 },
+        },
+      },
+      zhuangzi: {
+        quote: "",
+        explanation:
+          "Xunzi writes that Zhuangzi wrote about Heaven's perspective while neglecting the essential human perspective.",
+        display: {
+          brightness: 1,
+          position: { x: -0.4, y: -4.5, z: 3.83 },
+        },
+      },
+    },
+
+    displayProps: [
+      // !!! horrible
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.0, y: 1.0, z: 0.0 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.3, y: 0.88, z: -0.3 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.05, y: 0.76, z: 0.64 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.46, y: 0.64, z: -0.6 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.8, y: 0.52, z: 0.14 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.76, y: 0.41, z: 0.48 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.2, y: 0.29, z: -0.9 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.4, y: 0.17, z: 0.87 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.93, y: 0.05, z: -0.3 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.9, y: -0.0, z: -0.3 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.41, y: -0.1, z: 0.89 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.28, y: -0.2, z: -0.9 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.7, y: -0.4, z: 0.45 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.82, y: -0.5, z: 0.18 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.4, y: -0.6, z: -0.6 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.0, y: -0.7, z: 0.63 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: 0.35, y: -0.8, z: -0.3 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+      {
+        type: "arrow",
+        properties: {
+          dir: { x: -0.0, y: -1.0, z: -0.0 },
+          length: 9,
+          color: "white",
+          headLength: 1,
+          headWidth: 0.2,
+        },
+      },
+    ],
+
+    displayPosition: { x: 2.5, y: 0, z: 0 },
 
     keyTerms: [
       {
         term: "性惡",
         pinyin: "xìng è",
-        description: "Human nature is bad; goodness is cultivated.",
+        description:
+          "Strongly against Mencius, Xunzi argues that human nature (xing) is fundamentally bad (è).",
       },
       {
         term: "禮",
         pinyin: "lǐ",
-        description: "Ritual as the system that shapes desires.",
+        description:
+          "Xunzi strongly praises ritual as the system that gives proper form to human dispositions.",
       },
     ],
 
@@ -897,14 +1150,7 @@ export const philosophers = [
     dates: [400, 337], // wikipedia
     string: 7,
 
-    relationships: [
-      {
-        targetId: "hanfeizi",
-        kind: "influences",
-        tone: "positive",
-        strength: 1.0,
-      },
-    ],
+    relationships: [],
 
     views: {},
 
