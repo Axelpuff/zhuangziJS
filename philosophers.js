@@ -686,9 +686,9 @@ export const philosophers = [
     //"The Way of Heaven is such that if you \"follow\" then you will be great, while if you alter then you will be insignificant." (Section 2)
     views: {
       laozi: {
-        quote: "",
+        quote: "The Way of Heaven is such that if you \"follow\" then you will be great, while if you alter then you will be insignificant.",
         explanation:
-          "While the Laozi does not mention any other figures by name, it mentions ritual in a negative light as the lowest form of virtue.",
+          "Some of Shen Dao's ideas seem based on the Laozi: he refers to the paradoxical nature of the \"Way of Heaven\", as well as claiming that a ruler must not try to handle everything individually or force others to change.",
         display: {
           brightness: 0.5,
           position: { x: -2, y: 0, z: 0 }, // intended to be to the left
