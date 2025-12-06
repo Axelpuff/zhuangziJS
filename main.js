@@ -3,7 +3,11 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { schools, philosophers } from "./philosophers.js";
 import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.13/+esm";
-import { MarkdownBlock, MarkdownSpan, MarkdownElement } from "https://md-block.verou.me/md-block.js";
+import {
+  MarkdownBlock,
+  MarkdownSpan,
+  MarkdownElement,
+} from "https://md-block.verou.me/md-block.js";
 
 const schoolMap = Object.fromEntries(schools.map((p) => [p.id, p]));
 const philosopherMap = Object.fromEntries(philosophers.map((p) => [p.id, p]));
@@ -224,7 +228,9 @@ function focusRelevantOrbs(philosopherId, views) {
     focusedOrbs.push(orbMap[philosopherId]);
   }
   // position perspective axis based on current orb location
-  orbPerspectiveAxis.rotation.copy(vertical ? axisRotationVertical : axisRotationHorizontal); // !!! not great
+  orbPerspectiveAxis.rotation.copy(
+    vertical ? axisRotationVertical : axisRotationHorizontal
+  ); // !!! not great
   orbPerspectiveAxis.position.z = mainOrb.position.z;
   orbPerspectiveAxis.position.y = orbPerspectiveY;
 }
@@ -270,8 +276,8 @@ function repositionFocusedOrbs(
         z: targetWorldPos.z,
         onComplete: () => {
           /* if (orb.parent == null) { */
-            orb.position.copy(orbPerspectiveAxis.worldToLocal(orb.position));
-            orbPerspectiveAxis.add(orb);
+          orb.position.copy(orbPerspectiveAxis.worldToLocal(orb.position));
+          orbPerspectiveAxis.add(orb);
           /* } */
         },
       },
@@ -501,7 +507,10 @@ function fillPanes(selectedPhil) {
   removeAllParagraphs(rightPanel);
 
   const md_block = document.createElement("md-block");
-  md_block.setAttribute("src", "descriptions/" + selectedPhil.id + "/description.md");
+  md_block.setAttribute(
+    "src",
+    "descriptions/" + selectedPhil.id + "/description.md"
+  );
   rightPanel.appendChild(md_block);
 
   headCN.textContent = selectedPhil.chineseName;
@@ -722,31 +731,39 @@ function showSecondary(destPhilId) {
   headEN.textContent = secondaryPhil.name;
   removeAllParagraphs(rightPanel);
   const md_block = document.createElement("md-block");
-   if (selectedPhilId != secondaryPhilId) {
-    md_block.setAttribute("src", "descriptions/" + selectedPhilId + "/views/" + secondaryPhilId + "/description.md");
+  if (selectedPhilId != secondaryPhilId) {
+    md_block.setAttribute(
+      "src",
+      "descriptions/" +
+        selectedPhilId +
+        "/views/" +
+        secondaryPhilId +
+        "/description.md"
+    );
 
     const md_quote = document.createElement("md-block");
-    md_quote.setAttribute("src", "descriptions/" + selectedPhilId + "/views/" + secondaryPhilId + "/quote.md");
-    md_quote.className = "italic h4"
-    const md_quoteSource = document.createElement("md-block");
-    md_quoteSource.setAttribute("src", "descriptions/" + selectedPhilId + "/views/" + secondaryPhilId + "/quoteSource.md");
-    md_quoteSource.className = "blockquote-footer";
-    
-    //rightPanel.appendChild(md_quote);
-    rightPanel.appendChild(md_quoteSource);
+    md_quote.setAttribute(
+      "src",
+      "descriptions/" +
+        selectedPhilId +
+        "/views/" +
+        secondaryPhilId +
+        "/quote.md"
+    );
+    md_quote.className = "italic h4";
 
-    rightPanel.appendChild(md_block);
-    
+    subheading.textContent = "";
     subheading.appendChild(md_quote); //view.quote != "" ? '"' + view.quote + '"' : "";
-    subheading.appendChild(md_quoteSource);
     subheading.classList.add("italic");
   } else {
-  // otherwise it's the main philosopher and his full description
-  md_block.setAttribute("src", "descriptions/" + selectedPhilId + "/description.md");
-  rightPanel.appendChild(md_block);
+    // otherwise it's the main philosopher and his full description
+    // !!! dates don't get restored rn
+    md_block.setAttribute(
+      "src",
+      "descriptions/" + selectedPhilId + "/description.md"
+    );
   }
-  
-
+  rightPanel.appendChild(md_block);
 }
 
 function onPointerDown(event) {

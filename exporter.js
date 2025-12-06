@@ -24,7 +24,7 @@ for (const philosopher of philosophers) {
   );
   fs.writeFile(
     path + "/quote.md",
-    '*"' + philosopher.quote + '"*' || "TBA",
+    '*"' + (philosopher.quote || "TBA") + '"*',
     basicCallback
   );
   for (const viewedId in philosopher.views) {
@@ -37,7 +37,7 @@ for (const philosopher of philosophers) {
     );
     fs.writeFile(
       viewPath + "/quote.md",
-      '*"' + philosopher.views[viewedId].quote + '"*' || "TBA",
+      '*"' + (philosopher.views[viewedId].quote || "TBA") + '"*',
       basicCallback
     );
   }
@@ -51,7 +51,7 @@ for (const philosopher of philosophers) {
     );
     fs.writeFile(
       keyTermPath + "/quote.md",
-      '*"' + keyTerm.quote + '"*' || "TBA",
+      '*"' + (keyTerm.quote || "TBA") + '"*',
       basicCallback
     );
   }
