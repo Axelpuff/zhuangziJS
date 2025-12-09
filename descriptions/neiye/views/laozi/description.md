@@ -1,1 +1,1 @@
-The Neiye may be an individual practice based on the Laozi, or the Laozi may be an extension of the Neiye's cosmology.
+The *Neiye* may be a spiritual practice based on the *Laozi*, or the *Laozi* may be an extension of the *Neiye* into a broader cosmology and its political implications. Both share a view of the Way (*dao*) as a subtle but powerful cosmic force, which can be known and aligned with only through emptiness and nonaction.

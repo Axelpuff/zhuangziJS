@@ -1,1 +1,3 @@
-Gaozi views human nature as essentially malleable. It is like a tree which must be molded into cups and bowls, or water that flows where an opening is made. Human nature produces instincts like hunger; it is not what produces the forms of righteousness and benevolence from the basic materials of human nature.
+Gaozi views human nature as essentially malleable. It is like a tree which must be molded into cups and bowls, or water that flows where an opening is made. Human nature produces instincts like hunger; it is merely a substance that can take on the forms of righteousness and benevolence. Unlike Xunzi's view, which seems to draw on Gaozi's, human nature is ambivalent rather than distinctively bad.
+
+*This Xunzi-Gaozi distinction is based on https://iep.utm.edu/mencius/.*

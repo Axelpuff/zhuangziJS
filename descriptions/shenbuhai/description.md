@@ -1,1 +1,1 @@
-TBA
+Shen Buhai was a statesman in the state of ???. He is credited for developing the system of "Standards of ???" (CHINESE), a system for measuring and evaluating the performance of ministers. His methods influenced Han Feizi, who saw Shen Buhai as the counterpart to Lord Shang.

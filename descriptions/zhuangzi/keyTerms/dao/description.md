@@ -1,1 +1,1 @@
-The wandering, shifting Way beyond fixed distinctions.
+Zhuangzi's Way (*dao*) is similar to the *Laozi* and *Neiye*'s versions in its cosmic significance. But rather than being solely the undifferentiated source of things, it is the totality of everything, both undifferentiated and differentiated. Things do not have a distinct existence apart from the Way. Humans use names and words to describe parts of the Way, but since it is constantly transforming, the labels cannot remain fixed in meaning.
