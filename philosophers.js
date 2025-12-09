@@ -8,8 +8,8 @@ export const schools = [
     color: "#ff0000", // "vermillion",
   },
   {
-    id: "mohist",
-    name: "Mohist",
+    id: "gray_school",
+    name: "",
     chineseName: "...",
     color: "gray",
   },
@@ -98,7 +98,7 @@ export const philosophers = [
     id: "mozi",
     name: "Mozi",
     chineseName: "墨子",
-    school: "mohist",
+    school: "gray_school",
     major: true,
     dates: [480, 390],
     string: 3,
@@ -137,7 +137,7 @@ export const philosophers = [
     name: "Gaozi",
     chineseName: "告子",
     /* color: "#aabbff", */
-    school: "mohist",
+    school: "gray_school", 
     major: false,
     dates: [420, 350],
     string: 3,
