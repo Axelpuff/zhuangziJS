@@ -1,6 +1,6 @@
 # About
 
-Hundred Schools Explorer aims to capture the landscape of Classical Chinese philosophy in all its harmony and dissonance. The philosophers and texts are arranged temporally along the strings of a *Giqun*, a traditional Chinese zither that existed in the time of Confucius.
+Hundred Schools Explorer aims to capture the landscape of Classical Chinese philosophy in all its harmony and dissonance. The philosophers and texts are arranged temporally along the strings of a *Guqin*, a traditional Chinese zither that existed in the time of Confucius.
 
 ## How to use
 
@@ -11,6 +11,8 @@ Hundred Schools Explorer aims to capture the landscape of Classical Chinese phil
 Within that view, **click on another sphere** to learn more about the place of another text within that perspective.
 
 ## Credits
+
+The Guqin model is by [Inditrion Dradnon on Sketchfab](https://sketchfab.com/3d-models/chinese-zither-52e6e8b6c56641be9f379f99aa5c3882) and is available under a Creative Commons Attribution license.
 
 In terms of interpretation, this project is deeply indebted to Michael Puett, Philip J. Ivanhoe, and Bryan W. Van Norden. Countless connections between the thinkers come from lecture, section, and the footnotes of *Readings in Classical Chinese Philosophy* (Ivanhoe and Van Norden, Third ed., Hackett). The book's inclusion of more obscure philosophers (the School of Names, Yang Zhu, Shen Dao) and their influence on the major thinkers was one of two major inspirations for this project, the other being my attempts to diagram out the relationships between the thinkers during lecture.
 
